@@ -1,8 +1,8 @@
 # https://www.robotstxt.org/robotstxt.html
+
+# Default rules for all bots
 User-agent: *
 Allow: /
-
-# Disallow admin and private areas
 Disallow: /admin/
 Disallow: /private/
 Disallow: /serviceWorker.js
@@ -10,24 +10,22 @@ Disallow: /serviceWorker.js
 # Sitemap location
 Sitemap: https://yourdomain.com/sitemap.xml
 
-# Crawl-delay for specific bots
+# Block AI bots
 User-agent: GPTBot
-Crawl-delay: 10
+Disallow: /
 
 User-agent: CCBot
-Crawl-delay: 10
+Disallow: /
 
 User-agent: ChatGPT-User
 Disallow: /
 
-# Allow Google bots
+# Google bots specific rules
 User-agent: Googlebot
 Allow: /
+
 User-agent: Googlebot-Image
 Allow: /
+
 User-agent: Googlebot-Mobile
 Allow: /
-
-# Rate limiting for other bots
-User-agent: *
-Crawl-delay: 5
