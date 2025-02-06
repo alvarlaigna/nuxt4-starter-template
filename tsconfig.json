@@ -7,7 +7,13 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    "types": ["@nuxt/types", "@nuxt/image", "@vueuse/nuxt", "@types/node"],
+    "baseUrl": ".",
+    "types": [
+      "@nuxt/types",
+      "@nuxt/image",
+      "@vueuse/nuxt",
+      "@types/node"
+    ],
     "paths": {
       "#app": ["./.nuxt/types/app"],
       "#app/*": ["./.nuxt/types/app/*"],
@@ -21,7 +27,18 @@
   "include": [
     "./.nuxt/nuxt.d.ts",
     "./app/**/*",
-    "./server/**/*"
+    "./server/**/*",
+    "./.nuxt/types/nitro-imports.d.ts",
+    "./.nuxt/types/app.config.d.ts",
+    "./.nuxt/types/**/*"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

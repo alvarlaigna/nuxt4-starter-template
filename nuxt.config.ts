@@ -102,7 +102,9 @@ export default defineNuxtConfig({
         moduleResolution: "bundler",
         paths: {
           "#imports": ["./.nuxt/types/imports.d.ts"],
-          "#vue-router": ["./node_modules/vue-router/dist/vue-router.d.ts"]
+          "#vue-router": ["./node_modules/vue-router/dist/vue-router.d.ts"],
+          "#app/*": ["./.nuxt/types/app/*"],
+          "#app/nuxt": ["./.nuxt/types/app/nuxt"]
         }
       }
     }
@@ -216,7 +218,10 @@ export default defineNuxtConfig({
 
   alias: {
     '#app': './.nuxt/types/app',
-    '#app/nuxt': './.nuxt/types/app/nuxt'
+    '#app/nuxt': './.nuxt/types/app/nuxt',
+    '#imports': './.nuxt/types/imports',
+    '#head': './.nuxt/types/head',
+    '#components': './components'
   }
 });
 
