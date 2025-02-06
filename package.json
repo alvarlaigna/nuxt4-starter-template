@@ -1,55 +1,73 @@
 {
-  "name": "nuxt-app",
+  "name": "nuxt4-starter-template",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=18.19.0",
+    "yarn": ">=1.22.0"
+  },
   "scripts": {
-    "build": "nuxt build",
     "dev": "nuxt dev",
-    "lint": "npx stylelint ./app/assets/css/**/*.css --fix && npx stylelint ./app/{components,pages,layouts}/**/*.vue --fix && eslint . --fix",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "npx nuxi typecheck .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck",
+    "clean": "nuxt cleanup && rm -rf node_modules .nuxt .output",
+    "format": "prettier --write .",
+    "test": "vitest",
+    "test:e2e": "cypress open",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{vue,ts,mjs,css}": [
-      "npm run lint",
-      "npm run typecheck"
-    ]
-  },
-  "engines": {
-    "node": "22.x"
-  },
   "dependencies": {
-    "@nuxt/eslint": "^0.7.6",
-    "@nuxt/fonts": "^0.10.3",
+    "@nuxt/fonts": "^0.5.1",
     "@nuxt/icon": "^1.10.3",
-    "@nuxt/image": "^1.9.0",
-    "@tailwindcss/vite": "^4.0.3",
-    "@vueuse/nuxt": "^12.5.0",
-    "nuxt-security": "^2.1.5",
-    "radix-vue": "^1.9.13",
-    "tailwind-variants": "^0.3.1",
-    "tailwindcss": "^4.0.3",
-    "vue": "latest",
-    "vue-router": "latest"
+    "@vueuse/nuxt": "^10.7.2",
+    "nuxt": "^3.10.0",
+    "radix-vue": "^1.3.2"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^1.7.0",
-    "cssnano": "^7.0.6",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.4.3",
-    "nuxt": "^3.15.4",
-    "prettier": "3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "stylelint": "^16.14.1",
-    "stylelint-config-recess-order": "^6.0.0",
-    "stylelint-config-recommended-vue": "^1.6.0",
-    "stylelint-config-standard": "^37.0.0",
-    "stylelint-config-standard-scss": "^14.0.0",
-    "stylelint-prettier": "^5.0.3",
-    "typescript": "^5.7.3",
+    "@nuxt/devtools": "latest",
+    "@nuxt/eslint": "1.0.0",
+    "@nuxt/image": "^1.9.0",
+    "@nuxt/schema": "^3.15.4",
+    "@nuxt/test-utils": "^3.11.0",
+    "@nuxt/types": "^2.18.1",
+    "@nuxtjs/html-validator": "^1.8.2",
+    "@nuxtjs/robots": "^5.2.2",
+    "@nuxtjs/sitemap": "^7.2.4",
+    "@nuxtjs/tailwindcss": "^6.11.3",
+    "@types/node": "^22.13.1",
+    "@vue/test-utils": "^2.4.4",
+    "autoprefixer": "^10.4.17",
+    "compression-webpack-plugin": "^11.1.0",
+    "cypress": "^13.6.4",
+    "eslint": "^8.56.0",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.1",
+    "nuxt-security": "^2.1.5",
+    "postcss": "^8.4.31",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.2.4",
+    "stylelint": "^16.2.1",
+    "tailwind-variants": "^0.3.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
     "vue-tsc": "^2.2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,scss,vue}": [
+      "stylelint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

@@ -1,17 +1,35 @@
 <script lang="ts" setup>
-import type { Post } from "#shared/types";
+
+interface Post {
+  title: string;
+  // Add other post properties as needed
+}
 
 const posts = ref<Post[]>([]);
+const pending = ref(true);
 
-const { data, error } = await useFetch("/api/v1/posts");
+// Use composable for data fetching with SSR enabled
+const { data, error, pending: fetchPending } = useFetch<Post[]>("/api/v1/posts", {
+  key: 'posts',
+  server: true
+});
 
-if (error.value) {
-  throw createError({ ...error.value, statusMessage: "Posts Not Found" });
-}
+watchEffect(() => {
+  pending.value = fetchPending.value;
 
-if (data.value) {
-  posts.value = data.value.slice(0, 3);
-}
+  if (error.value) {
+    throw createError({
+      ...error.value,
+      statusMessage: "Posts Not Found"
+    });
+  }
+
+  if (data.value) {
+    // Ensure data.value is treated as Post[]
+    const postsArray = data.value as Post[];
+    posts.value = postsArray.slice(0, 3);
+  }
+});
 
 useHead({
   title: "Posts",
@@ -36,8 +54,7 @@ useHead({
             earum voluptate id ullam.
           </p>
           <div
-            class="sticky -bottom-8 z-10 -mx-8 -mb-8 flex justify-end rounded-b-lg border-t border-gray-200 bg-white/50 px-8 pt-8 pb-8 backdrop-blur-sm"
-          >
+            class="sticky -bottom-8 z-10 -mx-8 -mb-8 flex justify-end rounded-b-lg border-t border-gray-200 bg-white/50 px-8 pt-8 pb-8 backdrop-blur-sm">
             <DialogClose as-child>
               <AppButton>Close</AppButton>
             </DialogClose>
@@ -64,13 +81,22 @@ useHead({
           <p>Hello, Right Drawer!</p>
         </DialogDrawer>
       </div>
-      <p
-        class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm"
-      >
-        <span v-for="item in posts" :key="item.title">
-          {{ item.title }}
-        </span>
-      </p>
+      <ClientOnly>
+        <p class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm">
+          <template v-if="!pending && posts.length > 0">
+            <span v-for="item in posts" :key="item.title">
+              {{ item.title }}
+            </span>
+          </template>
+          <span v-else-if="pending">Loading posts...</span>
+          <span v-else>No posts available</span>
+        </p>
+        <template #fallback>
+          <p class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm">
+            <span>Loading posts...</span>
+          </p>
+        </template>
+      </ClientOnly>
     </main>
   </div>
 </template>

@@ -1,12 +1,40 @@
 {
   "editor.tabSize": 2,
   "files.associations": {
-    "*.css": "tailwindcss"
+    "*.css": "postcss"
   },
   "editor.quickSuggestions": {
     "strings": "on"
   },
   "tailwindCSS.experimental.classRegex": [
     ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "css.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": ["css", "postcss"],
+  "volar.autoCompleteRefs": true,
+  "volar.codeLens.pugTools": false,
+  "volar.completion.preferredTagNameCase": "pascal",
+  "volar.completion.preferredAttrNameCase": "kebab",
+  "volar.icon.preview": true,
+  "volar.updateImportsOnFileMove.enabled": true,
+  "editor.defaultFormatter": "Vue.volar",
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "workbench.colorCustomizations": {
+    "tree.indentGuidesStroke": "#f8f8f2",
+    "editorIndentGuide.activeBackground": "#f8f8f2",
+    "editorIndentGuide.background": "#44475a"
+  }
 }

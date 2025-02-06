@@ -1,41 +1,41 @@
-<script lang="ts" setup>
-interface Props {
-  error: Record<string, unknown>;
-}
-const props = defineProps<Props>();
+<!-- Custom error page for better error handling and shorter titles -->
+<script setup lang="ts">
+import { useHead } from '#imports'
 
-const message = computed(() =>
-  String(props.error?.statusMessage || "An error occurred")
-);
-const statusCode = computed(() => props.error?.statusCode || 500);
-const is404 = computed(
-  () => statusCode.value === 404 || message.value?.includes("404")
-);
-const genericMessage = computed(() =>
-  is404.value
-    ? "Looks like you've followed a broken link or entered a URL that doesn't exist on this site."
-    : "The server was unable to complete your request. Please try again later."
-);
+// Get the error from props
+const props = defineProps<{
+  error: {
+    statusCode?: number
+    statusMessage?: string
+    message?: string
+  }
+}>()
 
+// Set a concise page title
 useHead({
-  title: message.value,
-});
+  title: `Error ${props.error.statusCode || '404'}`
+})
+
+// Handle clearing the error
+const handleError = () => {
+  // Clear error and return to home
+  clearError({ redirect: '/' })
+}
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col justify-center text-center">
-    <main class="container">
-      <div class="mb-5 text-2xl font-semibold opacity-70">{{ statusCode }}</div>
-      <h1 class="mb-6 text-center text-4xl font-bold">
-        {{ is404 ? message : "An error occurred" }}
+  <div class="flex min-h-dvh flex-col items-center justify-center p-4 text-center">
+    <div class="rounded-lg bg-white/50 p-8 backdrop-blur-sm">
+      <h1 class="mb-4 text-4xl font-bold">
+        {{ error.statusCode === 404 ? 'Page Not Found' : 'An Error Occurred' }}
       </h1>
-      <p class="mb-12">
-        {{ genericMessage }}
+      <p class="mb-4 text-gray-600">
+        {{ error.message || error.statusMessage }}
       </p>
-      <AppButton to="/">Go back home</AppButton>
-      <LocalDevOnly>
-        {{ props.error }}
-      </LocalDevOnly>
-    </main>
+      <button type="button" class="rounded-md bg-brand-600 px-4 py-2 text-white transition hover:bg-brand-700"
+        @click="handleError">
+        Back to Home
+      </button>
+    </div>
   </div>
 </template>
