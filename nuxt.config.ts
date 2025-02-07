@@ -100,20 +100,16 @@ export default defineNuxtConfig({
     [
       "@nuxtjs/robots",
       {
+        robotsTxt: false,
         UserAgent: "*",
         Allow: "/",
         Disallow: ["/admin", "/private"],
-        Sitemap: process.env.NUXT_PUBLIC_SITE_URL
-          ? `${process.env.NUXT_PUBLIC_SITE_URL}/sitemap.xml`
-          : "https://nuxt4-starter-template.vercel.app/sitemap.xml",
       },
     ],
     [
       "@nuxtjs/sitemap",
       {
-        hostname:
-          process.env.NUXT_PUBLIC_SITE_URL ||
-          "https://nuxt4-starter-template.vercel.app",
+        hostname: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         gzip: true,
         exclude: ["/admin/**", "/private/**"],
         defaults: {
@@ -205,7 +201,7 @@ export default defineNuxtConfig({
 
   build: {
     transpile: ["vue-router"],
-    analyze: true,
+    analyze: process.env.NODE_ENV === "development",
   },
 
   vite: {
@@ -232,7 +228,7 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ["@vueuse/core", "vue-router", "@vueuse/core"],
+      include: ["@vueuse/core", "vue-router"],
     },
     ssr: {
       noExternal: ["workbox-window", /vue-i18n/],
