@@ -286,36 +286,37 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ["/"],
       failOnError: false,
-      ignore: ["/api/**", "/posts/**"],
     },
     routeRules: {
-      // Add cache rules for static pages
+      // Static pages
       "/": {
-        prerender: true,
+        prerender: false,
         cache: {
           maxAge: 3600,
           staleMaxAge: 60,
         },
       },
       "/posts": {
-        prerender: true,
+        prerender: false,
         cache: {
           maxAge: 3600,
           staleMaxAge: 60,
         },
       },
       "/posts/**": {
-        prerender: true,
+        prerender: false,
         cache: {
           maxAge: 3600,
           staleMaxAge: 60,
         },
       },
+      // Static assets
       "/_nuxt/**": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
         },
       },
+      // API routes
       "/api/**": {
         cors: true,
         headers: {
