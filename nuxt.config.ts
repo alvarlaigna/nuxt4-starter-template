@@ -338,6 +338,14 @@ export default defineNuxtConfig({
         base: "./.data/data",
       },
     },
+    errorHandler: "~/error",
+    devErrorHandler: "~/error.dev",
+    serverAssets: [
+      {
+        baseName: "public",
+        dir: "public",
+      },
+    ],
   },
 
   alias: {
