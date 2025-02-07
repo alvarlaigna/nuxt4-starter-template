@@ -29,7 +29,8 @@ const handleRetry = () => {
 
 <template>
   <div
-    class="bg-background flex min-h-screen items-center justify-center px-4 py-16 sm:px-6 sm:py-24 md:grid-cols-2 lg:px-8">
+    class="bg-background flex min-h-screen items-center justify-center px-4 py-16 sm:px-6 sm:py-24 md:grid-cols-2 lg:px-8"
+  >
     <div class="mx-auto max-w-max">
       <main class="sm:flex">
         <p class="text-primary text-4xl font-bold tracking-tight sm:text-5xl">
@@ -50,16 +51,22 @@ const handleRetry = () => {
             </p>
           </div>
 
-          <div class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-            <button type="button"
+          <div
+            class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6"
+          >
+            <button
+              type="button"
               class="bg-primary hover:bg-primary/90 focus:ring-primary inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
-              @click.prevent="handleError">
+              @click.prevent="handleError"
+            >
               Go back home
             </button>
 
-            <button type="button"
+            <button
+              type="button"
               class="bg-primary/10 text-primary hover:bg-primary/20 focus:ring-primary inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
-              @click.prevent="handleRetry">
+              @click.prevent="handleRetry"
+            >
               Try again
             </button>
           </div>
