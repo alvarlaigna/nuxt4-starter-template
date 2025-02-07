@@ -26,6 +26,7 @@ This template serves as a future-proof foundation for your projects, allowing yo
 - [x] [Vue](https://vuejs.org) - The Progressive JavaScript Framework
 - [x] [VueUse](https://nuxt.com/modules/vueuse) - Collection of Vue Composition Utilities
 - [x] [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
+- [x] [Vue I18n](https://vue-i18n.intlify.dev/) - Vue.js Internationalization
 
 ### 💅 Styling & UI
 
@@ -46,6 +47,40 @@ This template serves as a future-proof foundation for your projects, allowing yo
 - [x] Automated testing setup with Vitest and Cypress
 - [x] TypeScript strict mode enabled
 
+### 🌐 Internationalization (i18n)
+
+The template includes a fully configured i18n setup:
+
+- Vue I18n integration via plugins
+- Translation files in JSON format
+- Type-safe translations
+- Default English locale
+- Easy to add new languages
+
+### 📝 Example Features
+
+#### Posts Module
+
+A complete example implementation showcasing:
+
+- REST API integration with JSONPlaceholder
+- Server API routes
+- Type-safe data fetching
+- Loading states
+- Error handling
+- Responsive layouts
+- i18n integration
+
+#### Default Layout
+
+A responsive layout featuring:
+
+- Accessible navigation
+- Mobile-friendly header
+- Skip to content link
+- Footer with dynamic year
+- i18n support
+
 ## Project Structure
 
 ```text
@@ -53,14 +88,20 @@ This template serves as a future-proof foundation for your projects, allowing yo
 │   ├── components/     # Vue components
 │   ├── composables/    # Shared composition logic
 │   ├── layouts/        # Page layouts
+│   │   └── default.vue # Default layout with header and footer
+│   ├── locales/       # i18n translation files
 │   ├── middleware/     # Route middleware
 │   ├── pages/         # Application pages
+│   │   ├── index.vue  # Home page
+│   │   └── posts/     # Posts feature pages
 │   ├── plugins/       # Vue plugins
+│   │   └── i18n.ts   # i18n configuration
 │   ├── stores/        # State management
 │   └── utils/         # Utility functions
 ├── public/            # Static assets
-├── server/            # Server routes/middleware
-└── tests/            # Test files
+├── server/           # Server routes/middleware
+│   └── api/         # API endpoints
+└── tests/           # Test files
 ```
 
 ## Getting Started
