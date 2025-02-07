@@ -202,8 +202,8 @@ export default defineNuxtConfig({
     pageTransition: false,
     layoutTransition: false,
     keepalive: false,
-    baseURL: "/",
     buildAssetsDir: "/_nuxt/",
+    baseURL: "/",
     cdnURL: "",
   },
 
@@ -222,16 +222,9 @@ export default defineNuxtConfig({
       cssCodeSplit: false,
       rollupOptions: {
         output: {
-          assetFileNames: (assetInfo) => {
-            const info = assetInfo.name?.split(".");
-            const extType = info?.[info.length - 1];
-            if (extType === "css") {
-              return "css/[name].[hash].css";
-            }
-            return "assets/[name].[hash][extname]";
-          },
-          chunkFileNames: "js/[name].[hash].js",
-          entryFileNames: "js/[name].[hash].js",
+          assetFileNames: "_nuxt/[name].[hash][extname]",
+          chunkFileNames: "_nuxt/[name].[hash].js",
+          entryFileNames: "_nuxt/[name].[hash].js",
         },
       },
     },
@@ -312,21 +305,28 @@ export default defineNuxtConfig({
       "/**": {
         prerender: true,
       },
-      "/css/*.css": {
+      "/_nuxt/**.css": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
           "content-type": "text/css; charset=utf-8",
         },
       },
-      "/js/*.js": {
+      "/_nuxt/**.js": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
           "content-type": "application/javascript; charset=utf-8",
         },
       },
-      "/assets/*": {
+      "/_nuxt/**.mjs": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
+          "content-type": "application/javascript; charset=utf-8",
+        },
+      },
+      "/_nuxt/**.json": {
+        headers: {
+          "cache-control": "public, max-age=31536000, immutable",
+          "content-type": "application/json; charset=utf-8",
         },
       },
     },
