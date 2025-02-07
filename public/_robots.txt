@@ -8,7 +8,7 @@ Disallow: /private/
 Disallow: /serviceWorker.js
 
 # Sitemap location
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://nuxt4-starter-template.vercel.app/sitemap.xml
 
 # Block AI bots
 User-agent: GPTBot

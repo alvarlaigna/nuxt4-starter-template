@@ -85,13 +85,13 @@ export default defineNuxtConfig({
         UserAgent: "*",
         Allow: "/",
         Disallow: ["/admin", "/private"],
-        Sitemap: "https://yourdomain.com/sitemap.xml",
+        Sitemap: "https://nuxt4-starter-template.vercel.app/sitemap.xml",
       },
     ],
     [
       "@nuxtjs/sitemap",
       {
-        hostname: "https://yourdomain.com",
+        hostname: "https://nuxt4-starter-template.vercel.app",
         gzip: true,
         exclude: ["/admin/**", "/private/**"],
         defaults: {
@@ -162,7 +162,7 @@ export default defineNuxtConfig({
       link: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-        { rel: "canonical", href: "https://yourdomain.com" },
+        { rel: "canonical", href: "https://nuxt4-starter-template.vercel.app" },
       ],
     },
   },
