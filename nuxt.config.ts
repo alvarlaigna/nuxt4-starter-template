@@ -197,6 +197,8 @@ export default defineNuxtConfig({
     },
     keepalive: true,
     pageTransition: { name: "page", mode: "out-in" },
+    baseURL: process.env.NUXT_PUBLIC_SITE_URL || "/",
+    buildAssetsDir: "/_nuxt/",
   },
 
   css: ["~/assets/css/main.css"],
@@ -215,9 +217,7 @@ export default defineNuxtConfig({
         output: {
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              if (id.includes("@vueuse") || id.includes("radix-vue")) {
-                return "vendor";
-              }
+              return "vendor";
             }
           },
         },
@@ -232,7 +232,7 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ["@vueuse/core"],
+      include: ["@vueuse/core", "vue-router", "@vueuse/core"],
     },
     ssr: {
       noExternal: ["workbox-window", /vue-i18n/],
@@ -295,7 +295,6 @@ export default defineNuxtConfig({
     routeRules: {
       // Add cache rules for static pages
       "/": {
-        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
@@ -303,7 +302,6 @@ export default defineNuxtConfig({
         },
       },
       "/posts": {
-        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
@@ -311,7 +309,6 @@ export default defineNuxtConfig({
         },
       },
       "/posts/**": {
-        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
@@ -322,7 +319,6 @@ export default defineNuxtConfig({
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
         },
-        swr: true,
       },
       "/api/**": {
         cors: true,
@@ -341,9 +337,6 @@ export default defineNuxtConfig({
         driver: "fs",
         base: "./.data/data",
       },
-    },
-    static: {
-      maxAge: 31536000,
     },
   },
 
