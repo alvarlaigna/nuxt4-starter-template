@@ -12,18 +12,25 @@ const {
   data,
   error,
   pending: fetchPending,
-} = useFetch<Post[]>("/api/v1/posts", {
+  refresh,
+} = await useFetch<Post[]>("/api/v1/posts", {
   key: "posts",
   server: true,
+  retry: 3,
+  timeout: 5000,
+  onResponseError(err) {
+    console.error("Error fetching posts:", err);
+  },
 });
 
 watchEffect(() => {
   pending.value = fetchPending.value;
 
   if (error.value) {
+    console.error("Posts fetch error:", error.value);
     throw createError({
       ...error.value,
-      statusMessage: "Posts Not Found",
+      statusMessage: error.value?.message || "Posts Not Found",
     });
   }
 
@@ -31,6 +38,13 @@ watchEffect(() => {
     // Ensure data.value is treated as Post[]
     const postsArray = data.value as Post[];
     posts.value = postsArray.slice(0, 3);
+  }
+});
+
+// Add auto-refresh on client side
+onMounted(() => {
+  if (import.meta.client) {
+    refresh();
   }
 });
 

@@ -239,6 +239,15 @@ export default defineNuxtConfig({
       }),
       environment: process.env.NODE_ENV || "production",
     },
+    fetch: {
+      baseURL: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+      },
+      retry: 3,
+      timeout: 10000,
+    },
   },
 
   telemetry: false,
@@ -256,8 +265,17 @@ export default defineNuxtConfig({
       ignore: ["/api/**"],
     },
     routeRules: {
-      "/**": { swr: true },
-      "/api/**": { swr: true },
+      // Add cache rules for static pages
+      "/": { swr: 3600 },
+      "/posts": { swr: 3600 },
+      "/posts/**": { swr: 3600 },
+      "/api/**": {
+        cache: {
+          maxAge: 60,
+          staleMaxAge: 60,
+          swr: true,
+        },
+      },
     },
     storage: {
       fs: {
