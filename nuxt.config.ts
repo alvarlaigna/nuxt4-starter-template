@@ -187,25 +187,13 @@ export default defineNuxtConfig({
           rel: "canonical",
           href: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         },
-        {
-          rel: "preload",
-          href: "/_nuxt/entry.D0jq-yqo.css",
-          as: "style",
-        },
-      ],
-      script: [
-        {
-          type: "module",
-          src: "/_nuxt/entry.mjs",
-          async: true,
-          crossorigin: "anonymous",
-        },
       ],
     },
     keepalive: true,
     pageTransition: { name: "page", mode: "out-in" },
     baseURL: "/",
     buildAssetsDir: "/_nuxt/",
+    cdnURL: "",
   },
 
   css: ["~/assets/css/main.css"],
@@ -341,6 +329,7 @@ export default defineNuxtConfig({
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
           "Content-Security-Policy": "script-src 'self'",
+          "Access-Control-Allow-Origin": "*",
         },
         prerender: true,
       },
@@ -353,6 +342,13 @@ export default defineNuxtConfig({
         },
       },
     },
+    publicAssets: [
+      {
+        dir: ".output/public/_nuxt",
+        maxAge: 31536000,
+        baseURL: "/_nuxt",
+      },
+    ],
     storage: {
       fs: {
         driver: "fs",
