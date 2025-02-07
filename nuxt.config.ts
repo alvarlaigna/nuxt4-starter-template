@@ -149,13 +149,14 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    // Enable modern features
-    componentIslands: true,
-    viewTransition: true,
+    // Disable experimental features causing warnings
+    componentIslands: false,
+    viewTransition: false,
     renderJsonPayloads: true,
     payloadExtraction: true,
-    asyncContext: true,
+    asyncContext: false,
     treeshakeClientOnly: true,
+    inlineSSRStyles: true,
   },
 
   app: {
@@ -181,6 +182,9 @@ export default defineNuxtConfig({
             "A modern Nuxt 4 starter template with best practices and optimizations built-in",
         },
         { property: "og:image", content: "/og-image.jpg" },
+        // Disable service worker
+        { name: "msapplication-config", content: "none" },
+        { name: "apple-mobile-web-app-capable", content: "no" },
       ],
       link: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
@@ -189,10 +193,18 @@ export default defineNuxtConfig({
           rel: "canonical",
           href: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         },
+        // Add proper preload for entry CSS
+        {
+          rel: "preload",
+          as: "style",
+          href: "/_nuxt/entry.css",
+        },
       ],
     },
-    keepalive: true,
-    pageTransition: { name: "page", mode: "out-in" },
+    // Disable page transitions until hydration is fixed
+    pageTransition: false,
+    layoutTransition: false,
+    keepalive: false,
     baseURL: "/",
     buildAssetsDir: "/_nuxt/",
     cdnURL: "",
@@ -209,18 +221,12 @@ export default defineNuxtConfig({
     build: {
       target: "esnext",
       minify: "esbuild",
-      cssMinify: true,
+      cssMinify: "lightningcss",
       rollupOptions: {
         output: {
-          manualChunks(id) {
-            if (id.includes("node_modules")) {
-              // Create separate chunks for larger dependencies
-              if (id.includes("@vue/")) return "vue-vendor";
-              if (id.includes("@vueuse/")) return "vueuse-vendor";
-              if (id.includes("radix-vue/")) return "radix-vendor";
-              return "vendor"; // Other dependencies
-            }
-          },
+          assetFileNames: "_nuxt/[name].[hash][extname]",
+          chunkFileNames: "_nuxt/[name].[hash].mjs",
+          entryFileNames: "_nuxt/[name].[hash].mjs",
         },
       },
       // Add modern JavaScript optimizations
@@ -299,58 +305,17 @@ export default defineNuxtConfig({
     minify: true,
     timing: true,
     prerender: {
-      crawlLinks: false,
+      crawlLinks: true,
       routes: ["/"],
       failOnError: false,
     },
     routeRules: {
-      // Static pages
-      "/": {
-        prerender: false,
-        cache: {
-          maxAge: 3600,
-          staleMaxAge: 60,
-        },
+      "/**": {
+        prerender: true,
       },
-      "/posts": {
-        prerender: false,
-        cache: {
-          maxAge: 3600,
-          staleMaxAge: 60,
-        },
-      },
-      "/posts/**": {
-        prerender: false,
-        cache: {
-          maxAge: 3600,
-          staleMaxAge: 60,
-        },
-      },
-      // Service Worker
-      "/serviceWorker.js": {
-        headers: {
-          "Cache-Control": "no-cache",
-          "Service-Worker-Allowed": "/",
-        },
-      },
-      // Static assets
       "/_nuxt/**": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, OPTIONS",
-          "Access-Control-Allow-Headers": "*",
-        },
-        prerender: true,
-      },
-      // API routes
-      "/api/**": {
-        cors: true,
-        headers: {
-          "access-control-allow-methods": "GET, OPTIONS",
-          "access-control-allow-headers": "*",
-          "access-control-allow-origin": "*",
-          "cache-control": "public, s-maxage=60, stale-while-revalidate=60",
         },
       },
     },

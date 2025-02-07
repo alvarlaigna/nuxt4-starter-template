@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { useNuxtApp } from "#imports";
 import { computed, watchEffect, onMounted } from "vue";
+import type { Composer } from "vue-i18n";
+import type { NuxtApp } from "nuxt/app";
 
 interface Post {
   id: number;
@@ -12,8 +14,8 @@ interface Post {
   userId: number;
 }
 
-const { $i18n } = useNuxtApp();
-const { t } = $i18n as any; // Type assertion to avoid unknown type error
+const nuxtApp = useNuxtApp() as NuxtApp & { $i18n: () => Composer };
+const t = nuxtApp.$i18n().t;
 
 const {
   data: posts,
@@ -65,7 +67,7 @@ useHead({
 </script>
 
 <template>
-  <main class="flex min-h-dvh flex-col justify-center text-center">
+  <div class="flex min-h-dvh flex-col justify-center text-center">
     <div class="container">
       <div class="mb-6 flex justify-center">
         <Icon name="logos:nuxt-icon" size="80" />
@@ -76,11 +78,15 @@ useHead({
       </p>
 
       <!-- Interactive Components -->
-      <ClientOnly>
+      <ClientOnly fallback-tag="span">
         <div class="flex flex-wrap justify-center gap-4">
           <DialogModal size="xl" title="Modal title">
             <template #trigger>
               <AppButton>Open Dialog</AppButton>
+            </template>
+            <template #description>
+              This is a modal dialog that demonstrates the functionality of the
+              dialog component.
             </template>
             <p v-for="i in 20" :key="i" class="mb-4">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
@@ -100,11 +106,19 @@ useHead({
             <template #trigger>
               <AppButton>Left Drawer</AppButton>
             </template>
+            <template #description>
+              This is a left drawer that demonstrates the drawer component
+              functionality.
+            </template>
             <p>Hello, Left Drawer!</p>
           </DialogDrawer>
           <DialogDrawer title="Drawer title" position="bottom">
             <template #trigger>
               <AppButton>Bottom Drawer</AppButton>
+            </template>
+            <template #description>
+              This is a bottom drawer that demonstrates the drawer component
+              functionality.
             </template>
             <div class="container">
               <p>Hello, Bottom Drawer!</p>
@@ -114,6 +128,10 @@ useHead({
             <template #trigger>
               <AppButton>Right Drawer</AppButton>
             </template>
+            <template #description>
+              This is a right drawer that demonstrates the drawer component
+              functionality.
+            </template>
             <p>Hello, Right Drawer!</p>
           </DialogDrawer>
         </div>
@@ -122,7 +140,7 @@ useHead({
       <!-- Latest Posts -->
       <div class="mx-auto mt-12 max-w-2xl">
         <h2 class="mb-6 text-2xl font-bold">Latest Posts</h2>
-        <ClientOnly>
+        <ClientOnly fallback-tag="span">
           <div class="space-y-4">
             <template v-if="!pending && postsToDisplay.length > 0">
               <div
@@ -169,5 +187,5 @@ useHead({
         </ClientOnly>
       </div>
     </div>
-  </main>
+  </div>
 </template>

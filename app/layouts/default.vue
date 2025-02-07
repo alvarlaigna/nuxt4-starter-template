@@ -42,7 +42,12 @@
       id="main-content"
       class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8"
     >
-      <slot />
+      <NuxtLoadingIndicator
+        color="var(--color-brand)"
+        :height="2"
+        class="z-50"
+      />
+      <NuxtPage />
     </main>
 
     <footer class="mt-auto border-t py-6">
@@ -56,8 +61,11 @@
 </template>
 
 <script setup lang="ts">
-const { $i18n } = useNuxtApp();
-const { t } = $i18n();
+import type { Composer } from "vue-i18n";
+import type { NuxtApp } from "nuxt/app";
+
+const nuxtApp = useNuxtApp() as NuxtApp & { $i18n: () => Composer };
+const t = nuxtApp.$i18n().t;
 
 const navigation = [
   { name: t("nav.home"), href: "/" },

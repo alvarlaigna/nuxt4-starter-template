@@ -1,5 +1,12 @@
-import { createI18n, useI18n } from "vue-i18n";
-import type { App } from "vue";
+import { createI18n } from "vue-i18n";
+import type { Composer } from "vue-i18n";
+import type { NuxtApp } from "nuxt/app";
+
+declare module "nuxt/app" {
+  interface NuxtApp {
+    $i18n: () => Composer;
+  }
+}
 
 const messages = {
   en: {
@@ -31,7 +38,7 @@ const messages = {
   },
 };
 
-export default defineNuxtPlugin(({ vueApp }: { vueApp: App }) => {
+export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   const i18n = createI18n({
     legacy: false,
     globalInjection: true,
@@ -40,11 +47,11 @@ export default defineNuxtPlugin(({ vueApp }: { vueApp: App }) => {
     messages,
   });
 
-  vueApp.use(i18n);
+  nuxtApp.vueApp.use(i18n);
 
   return {
     provide: {
-      i18n: useI18n,
+      i18n: () => i18n.global as Composer,
     },
   };
 });
