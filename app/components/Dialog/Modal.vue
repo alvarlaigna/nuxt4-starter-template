@@ -17,6 +17,7 @@ type DialogVariants = VariantProps<typeof dialog>;
 interface Props {
   size?: DialogVariants["size"];
   title: string;
+  description?: string;
   dismissible?: boolean;
 }
 </script>
@@ -24,6 +25,7 @@ interface Props {
 <script setup lang="ts">
 const props = withDefaults(defineProps<Props>(), {
   size: "lg",
+  description: "",
   dismissible: true,
 });
 
@@ -70,11 +72,17 @@ watch(route, () => {
       <Transition name="slide-in-out">
         <DialogContent
           class="scroll-touch fixed inset-0 z-[2001] overflow-hidden overflow-y-auto p-4"
+          :aria-describedby="
+            props.description ? 'dialog-description' : undefined
+          "
         >
           <div ref="dialogContentEl" :class="ui">
             <DialogTitle class="font-heading mb-8 text-2xl font-bold">
               {{ props.title }}
             </DialogTitle>
+            <DialogDescription v-if="props.description" id="dialog-description">
+              {{ props.description }}
+            </DialogDescription>
             <slot />
             <DialogClose as-child>
               <AppButtonClose />

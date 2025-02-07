@@ -57,29 +57,32 @@ export default defineNuxtConfig({
           crossOriginEmbedderPolicy: false,
           crossOriginOpenerPolicy: false,
           crossOriginResourcePolicy: false,
-          contentSecurityPolicy: {
-            "base-uri": ["'self'"],
-            "font-src": ["'self'", "https:", "data:"],
-            "form-action": ["'self'"],
-            "frame-ancestors": ["'self'"],
-            "img-src": ["'self'", "data:", "https:"],
-            "object-src": ["'none'"],
-            "script-src-attr": ["'none'"],
-            "script-src": [
-              "'self'",
-              "'unsafe-inline'",
-              "'unsafe-eval'",
-              "https:",
-              "blob:",
-              "'wasm-unsafe-eval'",
-              "'strict-dynamic'",
-            ],
-            "style-src": ["'self'", "'unsafe-inline'", "https:"],
-            "connect-src": ["'self'", "https:", "wss:", "data:", "*"],
-            "default-src": ["'self'", "https:", "data:", "blob:", "wss:"],
-            "worker-src": ["'self'", "blob:", "https:"],
-            "manifest-src": ["'self'"],
-          },
+          contentSecurityPolicy:
+            process.env.NODE_ENV === "development"
+              ? false
+              : {
+                  "base-uri": ["'self'"],
+                  "font-src": ["'self'", "https:", "data:"],
+                  "form-action": ["'self'"],
+                  "frame-ancestors": ["'self'"],
+                  "img-src": ["'self'", "data:", "https:"],
+                  "object-src": ["'none'"],
+                  "script-src-attr": ["'none'"],
+                  "script-src": [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "'unsafe-eval'",
+                    "https:",
+                    "blob:",
+                    "'wasm-unsafe-eval'",
+                    "'strict-dynamic'",
+                  ],
+                  "style-src": ["'self'", "'unsafe-inline'", "https:"],
+                  "connect-src": ["'self'", "https:", "wss:", "data:", "*"],
+                  "default-src": ["'self'", "https:", "data:", "blob:", "wss:"],
+                  "worker-src": ["'self'", "blob:", "https:"],
+                  "manifest-src": ["'self'"],
+                },
           referrerPolicy: "no-referrer-when-downgrade",
         },
         requestSizeLimiter: {
@@ -184,6 +187,7 @@ export default defineNuxtConfig({
         // Disable service worker
         { name: "msapplication-config", content: "none" },
         { name: "apple-mobile-web-app-capable", content: "no" },
+        { "http-equiv": "x-content-type-options", content: "nosniff" },
       ],
       link: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
@@ -192,15 +196,9 @@ export default defineNuxtConfig({
           rel: "canonical",
           href: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         },
-        // Add proper preload for entry CSS
-        {
-          rel: "preload",
-          as: "style",
-          href: "/_nuxt/entry.css",
-        },
       ],
     },
-    // Disable page transitions until hydration is fixed
+    // Disable transitions until CSS is loaded
     pageTransition: false,
     layoutTransition: false,
     keepalive: false,
@@ -221,19 +219,21 @@ export default defineNuxtConfig({
       target: "esnext",
       minify: "esbuild",
       cssMinify: true,
+      cssCodeSplit: false,
       rollupOptions: {
         output: {
-          assetFileNames: "_nuxt/[name].[hash][extname]",
-          chunkFileNames: "_nuxt/[name].[hash].mjs",
-          entryFileNames: "_nuxt/[name].[hash].mjs",
+          assetFileNames: (assetInfo) => {
+            const info = assetInfo.name?.split(".");
+            const extType = info?.[info.length - 1];
+            if (extType === "css") {
+              return "css/[name].[hash].css";
+            }
+            return "assets/[name].[hash][extname]";
+          },
+          chunkFileNames: "js/[name].[hash].js",
+          entryFileNames: "js/[name].[hash].js",
         },
       },
-      // Add modern JavaScript optimizations
-      modulePreload: {
-        polyfill: false,
-      },
-      reportCompressedSize: true,
-      chunkSizeWarningLimit: 50,
     },
     css: {
       devSourcemap: false, // Disable in production
@@ -312,7 +312,19 @@ export default defineNuxtConfig({
       "/**": {
         prerender: true,
       },
-      "/_nuxt/**": {
+      "/css/*.css": {
+        headers: {
+          "cache-control": "public, max-age=31536000, immutable",
+          "content-type": "text/css; charset=utf-8",
+        },
+      },
+      "/js/*.js": {
+        headers: {
+          "cache-control": "public, max-age=31536000, immutable",
+          "content-type": "application/javascript; charset=utf-8",
+        },
+      },
+      "/assets/*": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
         },
