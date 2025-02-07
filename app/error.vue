@@ -1,6 +1,7 @@
 <!-- Custom error page for better error handling and shorter titles -->
 <script setup lang="ts">
 import { useHead } from "#imports";
+import { computed } from "vue";
 
 // Get the error from props
 const props = defineProps<{
@@ -8,12 +9,27 @@ const props = defineProps<{
     statusCode?: number;
     statusMessage?: string;
     message?: string;
+    url?: string;
   };
 }>();
 
+// Create a concise error title
+const errorTitle = computed(() => {
+  const code = props.error.statusCode || "404";
+
+  // Use a shorter error message instead of the full URL path
+  if (code === 404) {
+    return "404 | Page not found";
+  }
+
+  // For other errors, use a generic message
+  return `${code} | Error`;
+});
+
 // Set a concise page title
 useHead({
-  title: `Error ${props.error.statusCode || "404"}`,
+  title: errorTitle,
+  titleTemplate: "%s",
 });
 
 // Handle clearing the error
