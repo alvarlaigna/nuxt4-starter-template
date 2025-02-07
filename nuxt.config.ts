@@ -154,8 +154,10 @@ export default defineNuxtConfig({
     // Enable modern features
     componentIslands: true,
     viewTransition: true,
-    renderJsonPayloads: true,
-    payloadExtraction: true,
+    renderJsonPayloads: false,
+    payloadExtraction: false,
+    asyncContext: true,
+    treeshakeClientOnly: true,
   },
 
   app: {
@@ -288,6 +290,7 @@ export default defineNuxtConfig({
       crawlLinks: true,
       routes: ["/", "/posts", "/posts/1"],
       ignore: ["/api/**"],
+      failOnError: false,
     },
     routeRules: {
       // Add cache rules for static pages
@@ -319,6 +322,7 @@ export default defineNuxtConfig({
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
         },
+        swr: true,
       },
       "/api/**": {
         cors: true,
@@ -337,6 +341,9 @@ export default defineNuxtConfig({
         driver: "fs",
         base: "./.data/data",
       },
+    },
+    static: {
+      maxAge: 31536000,
     },
   },
 
