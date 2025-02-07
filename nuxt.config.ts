@@ -143,6 +143,7 @@ export default defineNuxtConfig({
     componentIslands: true,
     viewTransition: true,
     renderJsonPayloads: true,
+    payloadExtraction: true,
   },
 
   app: {
@@ -180,6 +181,8 @@ export default defineNuxtConfig({
         },
       ],
     },
+    keepalive: true,
+    pageTransition: { name: "page", mode: "out-in" },
   },
 
   css: ["~/assets/css/main.css"],
@@ -249,7 +252,12 @@ export default defineNuxtConfig({
     timing: true,
     prerender: {
       crawlLinks: true,
-      routes: ["/"],
+      routes: ["/", "/posts", "/posts/1"],
+      ignore: ["/api/**"],
+    },
+    routeRules: {
+      "/**": { swr: true },
+      "/api/**": { swr: true },
     },
     storage: {
       fs: {
@@ -269,5 +277,14 @@ export default defineNuxtConfig({
     "#imports": "./.nuxt/types/imports",
     "#head": "./.nuxt/types/head",
     "#components": "./components",
+  },
+
+  ssr: true,
+  spaLoadingTemplate: false,
+
+  router: {
+    options: {
+      strict: true,
+    },
   },
 } satisfies NuxtConfig);
