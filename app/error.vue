@@ -17,19 +17,28 @@ const props = defineProps<{
 const errorTitle = computed(() => {
   const code = props.error.statusCode || "404";
 
-  // Use a shorter error message instead of the full URL path
-  if (code === 404) {
-    return "404 | Page not found";
+  // Keep titles short and descriptive
+  switch (code) {
+    case 404:
+      return "Page not found";
+    case 500:
+      return "Server error";
+    default:
+      return `Error ${code}`;
   }
-
-  // For other errors, use a generic message
-  return `${code} | Error`;
 });
 
 // Set a concise page title
 useHead({
   title: errorTitle,
-  titleTemplate: "%s",
+  meta: [
+    {
+      name: "description",
+      content:
+        props.error.message ||
+        "An error occurred while processing your request.",
+    },
+  ],
 });
 
 // Handle clearing the error

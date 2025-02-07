@@ -283,10 +283,10 @@ export default defineNuxtConfig({
     minify: true,
     timing: true,
     prerender: {
-      crawlLinks: true,
-      routes: ["/", "/posts", "/posts/1"],
-      ignore: ["/api/**"],
+      crawlLinks: false,
+      routes: ["/"],
       failOnError: false,
+      ignore: ["/api/**", "/posts/**"],
     },
     routeRules: {
       // Add cache rules for static pages
