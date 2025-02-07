@@ -7,44 +7,46 @@
   <LocalDevOnly>{{ debugData }}</LocalDevOnly>
 -->
 <script setup lang="ts">
-import { computed, withDefaults, defineProps, defineSlots } from '#imports'
+import { computed, withDefaults, defineProps, defineSlots } from "#imports";
 
 // Define component props with TypeScript
 interface Props {
   /** Label shown in the debug header */
-  label?: string
+  label?: string;
   /** Whether to show a border around the debug container */
-  showBorder?: boolean
+  showBorder?: boolean;
   /** Custom CSS classes to apply to the container */
-  class?: string
+  class?: string;
 }
 
 // Define props with defaults
 const props = withDefaults(defineProps<Props>(), {
-  label: 'debug',
+  label: "debug",
   showBorder: true,
-  class: ''
-})
+  class: "",
+});
 
 // Computed classes for better performance
 const containerClasses = computed(() => [
-  'mx-2 my-4 max-w-screen overflow-hidden overflow-x-auto rounded-md bg-white/90 p-4',
-  'text-left font-mono text-[10px] text-[black] shadow-sm',
-  { 'border border-[black]/50': props.showBorder },
-  props.class
-])
+  "mx-2 my-4 max-w-screen overflow-hidden overflow-x-auto rounded-md bg-white/90 p-4",
+  "text-left font-mono text-[10px] text-[black] shadow-sm",
+  { "border border-[black]/50": props.showBorder },
+  props.class,
+]);
 
 // Define type-safe slots
 defineSlots<{
-  default: () => any
-}>()
+  default: () => any;
+}>();
 
 // Runtime checks for development mode
-const isDev = process.dev
+const isDev = import.meta.dev;
 
 // Provide warning if used in production
 if (!isDev) {
-  console.warn('LocalDevOnly component should only be used in development mode')
+  console.warn(
+    "LocalDevOnly component should only be used in development mode"
+  );
 }
 </script>
 
@@ -55,9 +57,9 @@ if (!isDev) {
       :class="containerClasses"
       data-testid="debug-container"
     >
-      <span 
+      <span
         v-if="label"
-        class="mb-2 block text-[8px] text-[black]/50 uppercase"
+        class="mb-2 block text-[8px] uppercase text-[black]/50"
         data-testid="debug-label"
       >
         {{ label }}

@@ -2,7 +2,7 @@
 import { tv, type VariantProps } from "tailwind-variants";
 
 const dialog = tv({
-  base: "shadow-brand-700/70 relative mx-auto my-14 rounded-lg bg-white p-8 text-black shadow-2xl",
+  base: "relative mx-auto my-14 rounded-lg bg-white p-8 text-black shadow-2xl shadow-brand-700/70",
   variants: {
     size: {
       sm: "max-w-sm",
@@ -65,7 +65,7 @@ watch(route, () => {
     </DialogTrigger>
     <DialogPortal>
       <Transition name="fade">
-        <DialogOverlay class="bg-brand-800/70 fixed inset-0 z-[2000]" />
+        <DialogOverlay class="fixed inset-0 z-[2000] bg-brand-800/70" />
       </Transition>
       <Transition name="slide-in-out">
         <DialogContent

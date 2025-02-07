@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 interface Post {
   title: string;
   // Add other post properties as needed
@@ -9,9 +8,13 @@ const posts = ref<Post[]>([]);
 const pending = ref(true);
 
 // Use composable for data fetching with SSR enabled
-const { data, error, pending: fetchPending } = useFetch<Post[]>("/api/v1/posts", {
-  key: 'posts',
-  server: true
+const {
+  data,
+  error,
+  pending: fetchPending,
+} = useFetch<Post[]>("/api/v1/posts", {
+  key: "posts",
+  server: true,
 });
 
 watchEffect(() => {
@@ -20,7 +23,7 @@ watchEffect(() => {
   if (error.value) {
     throw createError({
       ...error.value,
-      statusMessage: "Posts Not Found"
+      statusMessage: "Posts Not Found",
     });
   }
 
@@ -43,7 +46,7 @@ useHead({
         <Icon name="logos:nuxt-icon" size="80" />
       </div>
       <h1 class="mb-6 text-center text-5xl font-bold">Hello, World!</h1>
-      <p class="text-brand-50 mb-12">Can you see me?</p>
+      <p class="mb-12 text-brand-50">Can you see me?</p>
       <div class="flex flex-wrap justify-center gap-4">
         <DialogModal size="xl" title="Modal title">
           <template #trigger>Open Dialog</template>
@@ -54,7 +57,8 @@ useHead({
             earum voluptate id ullam.
           </p>
           <div
-            class="sticky -bottom-8 z-10 -mx-8 -mb-8 flex justify-end rounded-b-lg border-t border-gray-200 bg-white/50 px-8 pt-8 pb-8 backdrop-blur-sm">
+            class="sticky -bottom-8 z-10 -mx-8 -mb-8 flex justify-end rounded-b-lg border-t border-gray-200 bg-white/50 px-8 pb-8 pt-8 backdrop-blur-sm"
+          >
             <DialogClose as-child>
               <AppButton>Close</AppButton>
             </DialogClose>
@@ -82,7 +86,9 @@ useHead({
         </DialogDrawer>
       </div>
       <ClientOnly>
-        <p class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm">
+        <p
+          class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm"
+        >
           <template v-if="!pending && posts.length > 0">
             <span v-for="item in posts" :key="item.title">
               {{ item.title }}
@@ -92,7 +98,9 @@ useHead({
           <span v-else>No posts available</span>
         </p>
         <template #fallback>
-          <p class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm">
+          <p
+            class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm"
+          >
             <span>Loading posts...</span>
           </p>
         </template>

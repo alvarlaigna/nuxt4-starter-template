@@ -8,12 +8,7 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
-    "types": [
-      "@nuxt/types",
-      "@nuxt/image",
-      "@vueuse/nuxt",
-      "@types/node"
-    ],
+    "types": ["@nuxt/types", "@nuxt/image", "@vueuse/nuxt", "@types/node"],
     "paths": {
       "#app": ["./.nuxt/types/app"],
       "#app/*": ["./.nuxt/types/app/*"],
@@ -32,10 +27,7 @@
     "./.nuxt/types/app.config.d.ts",
     "./.nuxt/types/**/*"
   ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"

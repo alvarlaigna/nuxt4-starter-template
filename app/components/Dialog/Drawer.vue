@@ -2,7 +2,7 @@
 import { tv, type VariantProps } from "tailwind-variants";
 
 const drawer = tv({
-  base: "shadow-brand-700/70 absolute z-[1002] overflow-hidden bg-white text-black shadow-2xl",
+  base: "absolute z-[1002] overflow-hidden bg-white text-black shadow-2xl shadow-brand-700/70",
   variants: {
     size: {
       default: "",
@@ -10,9 +10,9 @@ const drawer = tv({
       lg: "",
     },
     position: {
-      left: "top-0 bottom-0 left-0 h-dvh",
-      right: "top-0 right-0 bottom-0 h-dvh",
-      bottom: "right-0 bottom-0 left-0 max-h-[50vh]",
+      left: "bottom-0 left-0 top-0 h-dvh",
+      right: "bottom-0 right-0 top-0 h-dvh",
+      bottom: "bottom-0 left-0 right-0 max-h-[50vh]",
     },
   },
   compoundVariants: [
@@ -90,7 +90,7 @@ watch(route, () => {
     </DialogTrigger>
     <DialogPortal>
       <Transition name="fade">
-        <DialogOverlay class="bg-brand-800/70 fixed inset-0 z-[1000]" />
+        <DialogOverlay class="fixed inset-0 z-[1000] bg-brand-800/70" />
       </Transition>
       <Transition :name="`slide-in-${props.position}`">
         <DialogContent
