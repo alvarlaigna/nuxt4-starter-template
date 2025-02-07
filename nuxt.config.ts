@@ -54,38 +54,44 @@ export default defineNuxtConfig({
       "nuxt-security",
       {
         headers: {
-          crossOriginEmbedderPolicy:
-            process.env.NODE_ENV === "development" ? false : "require-corp",
-          crossOriginOpenerPolicy:
-            process.env.NODE_ENV === "development" ? false : "same-origin",
-          crossOriginResourcePolicy:
-            process.env.NODE_ENV === "development" ? false : "same-origin",
-          contentSecurityPolicy:
-            process.env.NODE_ENV === "development"
-              ? false
-              : {
-                  "base-uri": ["'self'"],
-                  "font-src": ["'self'", "https:", "data:"],
-                  "form-action": ["'self'"],
-                  "frame-ancestors": ["'self'"],
-                  "img-src": ["'self'", "data:", "https:"],
-                  "object-src": ["'none'"],
-                  "script-src-attr": ["'none'"],
-                  "script-src": [
-                    "'self'",
-                    "'unsafe-inline'",
-                    "'unsafe-eval'",
-                    "https:",
-                    "'strict-dynamic'",
-                    "'nonce-{{nonce}}'",
-                  ],
-                  "style-src": ["'self'", "'unsafe-inline'", "https:"],
-                  "connect-src": ["'self'", "https:", "wss:", "data:"],
-                  "default-src": ["'self'"],
-                  "worker-src": ["'self'", "blob:"],
-                  "manifest-src": ["'self'"],
-                  "upgrade-insecure-requests": true,
-                },
+          crossOriginEmbedderPolicy: false,
+          crossOriginOpenerPolicy: false,
+          crossOriginResourcePolicy: false,
+          contentSecurityPolicy: {
+            "base-uri": ["'self'"],
+            "font-src": ["'self'", "https:", "data:"],
+            "form-action": ["'self'"],
+            "frame-ancestors": ["'self'"],
+            "img-src": ["'self'", "data:", "https:"],
+            "object-src": ["'none'"],
+            "script-src-attr": ["'none'"],
+            "script-src": [
+              "'self'",
+              "'unsafe-inline'",
+              "'unsafe-eval'",
+              "https:",
+              "blob:",
+            ],
+            "style-src": ["'self'", "'unsafe-inline'", "https:"],
+            "connect-src": ["'self'", "https:", "wss:", "data:"],
+            "default-src": ["'self'", "https:"],
+            "worker-src": ["'self'", "blob:"],
+            "manifest-src": ["'self'"],
+          },
+          referrerPolicy: "no-referrer-when-downgrade",
+        },
+        requestSizeLimiter: {
+          maxRequestSizeInBytes: 2000000,
+          maxUploadFileRequestInBytes: 8000000,
+        },
+        rateLimiter: false,
+        xssValidator: false,
+        corsHandler: {
+          origin: "*",
+          methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+          preflight: {
+            statusCode: 204,
+          },
         },
       },
     ],
@@ -205,8 +211,12 @@ export default defineNuxtConfig({
       cssMinify: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ["@vueuse/core", "radix-vue"],
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              if (id.includes("@vueuse") || id.includes("radix-vue")) {
+                return "vendor";
+              }
+            }
           },
         },
       },
@@ -282,6 +292,7 @@ export default defineNuxtConfig({
     routeRules: {
       // Add cache rules for static pages
       "/": {
+        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
@@ -289,6 +300,7 @@ export default defineNuxtConfig({
         },
       },
       "/posts": {
+        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
@@ -296,10 +308,16 @@ export default defineNuxtConfig({
         },
       },
       "/posts/**": {
+        static: true,
         prerender: true,
         cache: {
           maxAge: 3600,
           staleMaxAge: 60,
+        },
+      },
+      "/_nuxt/**": {
+        headers: {
+          "cache-control": "public, max-age=31536000, immutable",
         },
       },
       "/api/**": {
