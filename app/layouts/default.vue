@@ -42,11 +42,20 @@
       id="main-content"
       class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8"
     >
-      <NuxtLoadingIndicator
-        color="var(--color-brand)"
-        :height="2"
-        class="z-50"
-      />
+      <ClientOnly>
+        <Suspense>
+          <template #default>
+            <NuxtLoadingIndicator
+              color="var(--color-brand)"
+              :height="2"
+              class="z-50"
+            />
+          </template>
+          <template #fallback>
+            <div class="h-1 w-full bg-gray-200" />
+          </template>
+        </Suspense>
+      </ClientOnly>
       <NuxtPage />
     </main>
 

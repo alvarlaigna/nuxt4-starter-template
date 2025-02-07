@@ -156,7 +156,6 @@ export default defineNuxtConfig({
     payloadExtraction: true,
     asyncContext: false,
     treeshakeClientOnly: true,
-    inlineSSRStyles: true,
   },
 
   app: {
@@ -221,7 +220,7 @@ export default defineNuxtConfig({
     build: {
       target: "esnext",
       minify: "esbuild",
-      cssMinify: "lightningcss",
+      cssMinify: true,
       rollupOptions: {
         output: {
           assetFileNames: "_nuxt/[name].[hash][extname]",
