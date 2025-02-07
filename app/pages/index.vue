@@ -41,7 +41,7 @@ useHead({
 
 <template>
   <div class="flex min-h-dvh flex-col justify-center text-center">
-    <main class="container">
+    <div class="container">
       <div class="mb-6 flex justify-center">
         <Icon name="logos:nuxt-icon" size="80" />
       </div>
@@ -105,6 +105,6 @@ useHead({
           </p>
         </template>
       </ClientOnly>
-    </main>
+    </div>
   </div>
 </template>

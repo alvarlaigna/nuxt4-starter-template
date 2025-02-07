@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "extends": ["@nuxt/eslint-config", "plugin:prettier/recommended"],
+  "rules": {
+    "vue/first-attribute-linebreak": [
+      "error",
+      {
+        "singleline": "ignore",
+        "multiline": "below"
+      }
+    ],
+    "vue/max-attributes-per-line": [
+      "error",
+      {
+        "singleline": 3,
+        "multiline": 1
+      }
+    ],
+    "vue/multiline-html-element-content-newline": [
+      "error",
+      {
+        "ignores": ["pre", "textarea", "button", "NuxtLink"]
+      }
+    ]
+  }
+}

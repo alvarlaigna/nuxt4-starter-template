@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from "nuxt/config";
+import type { NuxtConfig } from "@nuxt/schema";
 
 export default defineNuxtConfig({
   devtools: {
@@ -137,7 +138,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Welcome",
-      titleTemplate: "%s - Nuxt 4 Starter Template",
+      titleTemplate: "%s - Nuxt",
       htmlAttrs: { lang: "en" },
       meta: [
         { charset: "utf-8" },
@@ -150,7 +151,7 @@ export default defineNuxtConfig({
         },
         { name: "theme-color", content: "#00DC82" },
         { property: "og:type", content: "website" },
-        { property: "og:title", content: "Nuxt 4 Starter Template" },
+        { property: "og:title", content: "Nuxt" },
         {
           property: "og:description",
           content:
@@ -253,4 +254,4 @@ export default defineNuxtConfig({
     "#head": "./.nuxt/types/head",
     "#components": "./components",
   },
-});
+} satisfies NuxtConfig);
