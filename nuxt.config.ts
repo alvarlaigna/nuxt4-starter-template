@@ -76,8 +76,14 @@ export default defineNuxtConfig({
                     "'unsafe-inline'",
                     "'unsafe-eval'",
                     "https:",
+                    "'strict-dynamic'",
+                    "'nonce-{{nonce}}'",
                   ],
-                  "style-src": ["'self'", "'unsafe-inline'"],
+                  "style-src": ["'self'", "'unsafe-inline'", "https:"],
+                  "connect-src": ["'self'", "https:", "wss:", "data:"],
+                  "default-src": ["'self'"],
+                  "worker-src": ["'self'", "blob:"],
+                  "manifest-src": ["'self'"],
                   "upgrade-insecure-requests": true,
                 },
         },
@@ -189,12 +195,22 @@ export default defineNuxtConfig({
 
   build: {
     transpile: ["vue-router"],
+    analyze: true,
   },
 
   vite: {
     build: {
       target: "esnext",
       minify: "esbuild",
+      cssMinify: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vue: ["vue", "vue-router"],
+            radix: ["radix-vue"],
+          },
+        },
+      },
     },
     css: {
       devSourcemap: true,
@@ -266,14 +282,32 @@ export default defineNuxtConfig({
     },
     routeRules: {
       // Add cache rules for static pages
-      "/": { swr: 3600 },
-      "/posts": { swr: 3600 },
-      "/posts/**": { swr: 3600 },
-      "/api/**": {
+      "/": {
+        prerender: true,
         cache: {
-          maxAge: 60,
+          maxAge: 3600,
           staleMaxAge: 60,
-          swr: true,
+        },
+      },
+      "/posts": {
+        prerender: true,
+        cache: {
+          maxAge: 3600,
+          staleMaxAge: 60,
+        },
+      },
+      "/posts/**": {
+        prerender: true,
+        cache: {
+          maxAge: 3600,
+          staleMaxAge: 60,
+        },
+      },
+      "/api/**": {
+        cors: true,
+        headers: {
+          "access-control-allow-methods": "GET",
+          "cache-control": "public, s-maxage=60, stale-while-revalidate=60",
         },
       },
     },
