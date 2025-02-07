@@ -71,6 +71,12 @@ export default defineNuxtConfig({
                   "img-src": ["'self'", "data:", "https:"],
                   "object-src": ["'none'"],
                   "script-src-attr": ["'none'"],
+                  "script-src": [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "'unsafe-eval'",
+                    "https:",
+                  ],
                   "style-src": ["'self'", "'unsafe-inline'"],
                   "upgrade-insecure-requests": true,
                 },
@@ -85,13 +91,17 @@ export default defineNuxtConfig({
         UserAgent: "*",
         Allow: "/",
         Disallow: ["/admin", "/private"],
-        Sitemap: "https://nuxt4-starter-template.vercel.app/sitemap.xml",
+        Sitemap: process.env.NUXT_PUBLIC_SITE_URL
+          ? `${process.env.NUXT_PUBLIC_SITE_URL}/sitemap.xml`
+          : "https://nuxt4-starter-template.vercel.app/sitemap.xml",
       },
     ],
     [
       "@nuxtjs/sitemap",
       {
-        hostname: "https://nuxt4-starter-template.vercel.app",
+        hostname:
+          process.env.NUXT_PUBLIC_SITE_URL ||
+          "https://nuxt4-starter-template.vercel.app",
         gzip: true,
         exclude: ["/admin/**", "/private/**"],
         defaults: {
@@ -162,7 +172,12 @@ export default defineNuxtConfig({
       link: [
         { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-        { rel: "canonical", href: "https://nuxt4-starter-template.vercel.app" },
+        {
+          rel: "canonical",
+          href:
+            process.env.NUXT_PUBLIC_SITE_URL ||
+            "https://nuxt4-starter-template.vercel.app",
+        },
       ],
     },
   },
@@ -215,6 +230,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
       buildAt: new Date().toLocaleString("nb-US", {
         timeZone: "Europe/Helsinki",
       }),
