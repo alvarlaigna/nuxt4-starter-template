@@ -206,8 +206,7 @@ export default defineNuxtConfig({
       rollupOptions: {
         output: {
           manualChunks: {
-            vue: ["vue", "vue-router"],
-            radix: ["radix-vue"],
+            vendor: ["@vueuse/core", "radix-vue"],
           },
         },
       },
@@ -221,7 +220,7 @@ export default defineNuxtConfig({
       },
     },
     optimizeDeps: {
-      include: ["vue", "vue-router", "@vueuse/core"],
+      include: ["@vueuse/core"],
     },
     ssr: {
       noExternal: ["workbox-window", /vue-i18n/],
