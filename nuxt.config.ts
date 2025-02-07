@@ -185,15 +185,13 @@ export default defineNuxtConfig({
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         {
           rel: "canonical",
-          href:
-            process.env.NUXT_PUBLIC_SITE_URL ||
-            "https://nuxt4-starter-template.vercel.app",
+          href: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         },
       ],
     },
     keepalive: true,
     pageTransition: { name: "page", mode: "out-in" },
-    baseURL: process.env.NUXT_PUBLIC_SITE_URL || "/",
+    baseURL: "/",
     buildAssetsDir: "/_nuxt/",
   },
 
