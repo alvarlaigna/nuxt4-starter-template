@@ -7,29 +7,32 @@
     "yarn": ">=1.22.0"
   },
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "typecheck": "nuxt typecheck",
-    "clean": "nuxt cleanup && rm -rf node_modules .nuxt .output",
-    "format": "prettier --write .",
-    "test": "vitest",
-    "test:e2e": "cypress open",
-    "prepare": "husky && husky install"
+    "dev": "./node_modules/.bin/nuxt dev",
+    "build": "./node_modules/.bin/nuxt build",
+    "generate": "./node_modules/.bin/nuxt generate",
+    "preview": "./node_modules/.bin/nuxt preview",
+    "postinstall": "./node_modules/.bin/nuxt prepare",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "./node_modules/.bin/eslint . --fix",
+    "typecheck": "./node_modules/.bin/nuxt typecheck",
+    "clean": "./node_modules/.bin/nuxt cleanup && rm -rf node_modules .nuxt .output",
+    "format": "./node_modules/.bin/prettier --write .",
+    "test": "./node_modules/.bin/vitest",
+    "test:e2e": "./node_modules/.bin/cypress open",
+    "prepare": "./node_modules/.bin/husky && ./node_modules/.bin/husky install"
   },
   "dependencies": {
     "@nuxt/fonts": "^0.5.1",
-    "@nuxt/icon": "^1.10.3",
-    "@vueuse/nuxt": "^10.7.2",
-    "nuxt": "^3.10.0",
+    "@nuxt/icon": "^1.10.3",    
+    "@vueuse/nuxt": "^12.5.0",
     "radix-vue": "^1.3.2",
-    "vue-i18n": "9"
+    "nuxt": "^3.15.4",
+    "vue-i18n": "9",
+    "vue": "latest",
+    "vue-router": "latest"
   },
   "devDependencies": {
+    "@nuxt/cli": "^3.15.4",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint": "1.0.0",
     "@nuxt/image": "1.0.0",
@@ -39,12 +42,14 @@
     "@nuxtjs/html-validator": "^1.8.2",
     "@nuxtjs/robots": "^5.2.2",
     "@nuxtjs/sitemap": "^7.2.4",
-    "@nuxtjs/tailwindcss": "^6.11.3",
+    "@nuxtjs/tailwindcss": "^6.11.3",    
     "@types/node": "^22.13.1",
     "@vue/test-utils": "^2.4.4",
     "autoprefixer": "^10.4.17",
     "compression-webpack-plugin": "^11.1.0",
     "cypress": "^13.6.4",
+    "cssnano": "^6.0.5",
+    "cssnano-preset-default": "^6.0.5",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
@@ -79,3 +84,4 @@
     ]
   }
 }
+

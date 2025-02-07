@@ -150,8 +150,8 @@ export default defineNuxtConfig({
     // Enable modern features
     componentIslands: true,
     viewTransition: true,
-    renderJsonPayloads: false,
-    payloadExtraction: false,
+    renderJsonPayloads: true,
+    payloadExtraction: true,
     asyncContext: true,
     treeshakeClientOnly: true,
   },
@@ -187,6 +187,19 @@ export default defineNuxtConfig({
           rel: "canonical",
           href: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000",
         },
+        {
+          rel: "preload",
+          href: "/_nuxt/entry.D0jq-yqo.css",
+          as: "style",
+        },
+      ],
+      script: [
+        {
+          type: "module",
+          src: "/_nuxt/entry.mjs",
+          async: true,
+          crossorigin: "anonymous",
+        },
       ],
     },
     keepalive: true,
@@ -211,14 +224,24 @@ export default defineNuxtConfig({
         output: {
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              return "vendor";
+              // Create separate chunks for larger dependencies
+              if (id.includes("@vue/")) return "vue-vendor";
+              if (id.includes("@vueuse/")) return "vueuse-vendor";
+              if (id.includes("radix-vue/")) return "radix-vendor";
+              return "vendor"; // Other dependencies
             }
           },
         },
       },
+      // Add modern JavaScript optimizations
+      modulePreload: {
+        polyfill: false,
+      },
+      reportCompressedSize: true,
+      chunkSizeWarningLimit: 50,
     },
     css: {
-      devSourcemap: true,
+      devSourcemap: false, // Disable in production
       preprocessorOptions: {
         scss: {
           additionalData: '@use "@/assets/scss/variables.scss" as *;',
@@ -227,6 +250,7 @@ export default defineNuxtConfig({
     },
     optimizeDeps: {
       include: ["@vueuse/core", "vue-router"],
+      exclude: ["vue-demi"],
     },
     ssr: {
       noExternal: ["workbox-window", /vue-i18n/],
@@ -244,6 +268,10 @@ export default defineNuxtConfig({
                 "default",
                 {
                   discardComments: { removeAll: true },
+                  reduceIdents: false,
+                  zindex: false,
+                  mergeIdents: false,
+                  normalizeWhitespace: true,
                 },
               ],
             },
@@ -312,7 +340,9 @@ export default defineNuxtConfig({
       "/_nuxt/**": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
+          "Content-Security-Policy": "script-src 'self'",
         },
+        prerender: true,
       },
       // API routes
       "/api/**": {
