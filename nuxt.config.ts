@@ -71,10 +71,12 @@ export default defineNuxtConfig({
               "'unsafe-eval'",
               "https:",
               "blob:",
+              "'wasm-unsafe-eval'",
+              "'strict-dynamic'",
             ],
             "style-src": ["'self'", "'unsafe-inline'", "https:"],
-            "connect-src": ["'self'", "https:", "wss:", "data:"],
-            "default-src": ["'self'", "https:"],
+            "connect-src": ["'self'", "https:", "wss:", "data:", "*"],
+            "default-src": ["'self'", "https:", "data:", "blob:"],
             "worker-src": ["'self'", "blob:"],
             "manifest-src": ["'self'"],
           },
@@ -328,8 +330,9 @@ export default defineNuxtConfig({
       "/_nuxt/**": {
         headers: {
           "cache-control": "public, max-age=31536000, immutable",
-          "Content-Security-Policy": "script-src 'self'",
           "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Headers": "*",
         },
         prerender: true,
       },
@@ -337,7 +340,9 @@ export default defineNuxtConfig({
       "/api/**": {
         cors: true,
         headers: {
-          "access-control-allow-methods": "GET",
+          "access-control-allow-methods": "GET, OPTIONS",
+          "access-control-allow-headers": "*",
+          "access-control-allow-origin": "*",
           "cache-control": "public, s-maxage=60, stale-while-revalidate=60",
         },
       },

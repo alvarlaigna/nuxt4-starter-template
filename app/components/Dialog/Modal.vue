@@ -61,7 +61,7 @@ watch(route, () => {
 <template>
   <DialogRoot>
     <DialogTrigger as-child>
-      <AppButton><slot name="trigger" /></AppButton>
+      <slot name="trigger" />
     </DialogTrigger>
     <DialogPortal>
       <Transition name="fade">

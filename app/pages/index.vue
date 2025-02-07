@@ -1,45 +1,49 @@
 <script lang="ts" setup>
+import { useNuxtApp } from "#imports";
+import { computed, watchEffect, onMounted } from "vue";
+
 interface Post {
+  id: number;
   title: string;
-  // Add other post properties as needed
+  body: string;
+  content: string;
+  author: string;
+  createdAt: string;
+  userId: number;
 }
 
-const posts = ref<Post[]>([]);
-const pending = ref(true);
+const { $i18n } = useNuxtApp();
+const { t } = $i18n as any; // Type assertion to avoid unknown type error
 
-// Use composable for data fetching with SSR enabled
 const {
-  data,
+  data: posts,
+  pending,
   error,
-  pending: fetchPending,
   refresh,
 } = await useFetch<Post[]>("/api/v1/posts", {
   key: "posts",
   server: true,
   retry: 3,
   timeout: 5000,
+  transform: (response) => {
+    if (!response || !Array.isArray(response)) {
+      console.error("Invalid response format:", response);
+      return [];
+    }
+    return response;
+  },
   onResponseError(err) {
     console.error("Error fetching posts:", err);
   },
 });
 
 watchEffect(() => {
-  pending.value = fetchPending.value;
-
   if (error.value) {
-    console.error("Posts fetch error:", error.value);
-    throw createError({
-      ...error.value,
-      statusMessage: error.value?.message || "Posts Not Found",
-    });
-  }
-
-  if (data.value) {
-    // Ensure data.value is treated as Post[]
-    const postsArray = data.value as Post[];
-    posts.value = postsArray.slice(0, 3);
+    console.error("Error in watchEffect:", error.value);
   }
 });
+
+const postsToDisplay = computed(() => posts.value?.slice(0, 3) ?? []);
 
 // Add auto-refresh on client side
 onMounted(() => {
@@ -49,24 +53,35 @@ onMounted(() => {
 });
 
 useHead({
-  title: "Posts",
+  title: "Welcome - Nuxt Starter Template",
+  meta: [
+    {
+      name: "description",
+      content:
+        "A modern Nuxt 4 starter template with best practices and optimizations built-in",
+    },
+  ],
 });
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col justify-center text-center">
+  <main class="flex min-h-dvh flex-col justify-center text-center">
     <div class="container">
       <div class="mb-6 flex justify-center">
         <Icon name="logos:nuxt-icon" size="80" />
       </div>
-      <h1 class="mb-6 text-center text-5xl font-bold">Hello, World!</h1>
-      <p class="mb-12 text-brand-50">Can you see me?</p>
+      <h1 class="mb-6 text-center text-5xl font-bold">{{ t("app.title") }}</h1>
+      <p class="text-muted-foreground mb-12">
+        {{ t("app.description") }}
+      </p>
 
-      <!-- Wrap dynamic components in ClientOnly -->
+      <!-- Interactive Components -->
       <ClientOnly>
         <div class="flex flex-wrap justify-center gap-4">
           <DialogModal size="xl" title="Modal title">
-            <template #trigger>Open Dialog</template>
+            <template #trigger>
+              <AppButton>Open Dialog</AppButton>
+            </template>
             <p v-for="i in 20" :key="i" class="mb-4">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
               architecto, enim vitae quibusdam culpa facilis assumenda expedita
@@ -102,33 +117,57 @@ useHead({
             <p>Hello, Right Drawer!</p>
           </DialogDrawer>
         </div>
-        <template #fallback>
-          <div class="flex justify-center">
-            <p>Loading components...</p>
-          </div>
-        </template>
       </ClientOnly>
 
-      <ClientOnly>
-        <p
-          class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm"
-        >
-          <template v-if="!pending && posts.length > 0">
-            <span v-for="item in posts" :key="item.title">
-              {{ item.title }}
-            </span>
-          </template>
-          <span v-else-if="pending">Loading posts...</span>
-          <span v-else>No posts available</span>
-        </p>
-        <template #fallback>
-          <p
-            class="mx-auto flex max-w-xl flex-wrap justify-center gap-2 pt-8 text-sm"
-          >
-            <span>Loading posts...</span>
-          </p>
-        </template>
-      </ClientOnly>
+      <!-- Latest Posts -->
+      <div class="mx-auto mt-12 max-w-2xl">
+        <h2 class="mb-6 text-2xl font-bold">Latest Posts</h2>
+        <ClientOnly>
+          <div class="space-y-4">
+            <template v-if="!pending && postsToDisplay.length > 0">
+              <div
+                v-for="post in postsToDisplay"
+                :key="post.id"
+                class="rounded-lg border p-4 text-left transition hover:shadow-sm"
+              >
+                <h3 class="font-semibold">{{ post.title }}</h3>
+                <p class="text-muted-foreground mt-2 line-clamp-2 text-sm">
+                  {{ post.content }}
+                </p>
+                <div
+                  class="text-muted-foreground mt-2 flex items-center justify-between text-xs"
+                >
+                  <span>{{ post.author }}</span>
+                  <time :datetime="post.createdAt">
+                    {{ new Date(post.createdAt).toLocaleDateString() }}
+                  </time>
+                </div>
+              </div>
+            </template>
+            <div
+              v-else-if="pending"
+              class="space-y-4"
+              role="status"
+              aria-label="Loading posts"
+            >
+              <div
+                v-for="n in 3"
+                :key="n"
+                class="animate-pulse rounded-lg border p-4"
+              >
+                <div class="bg-muted h-5 w-3/4 rounded"></div>
+                <div class="mt-4 space-y-2">
+                  <div class="bg-muted h-3 w-full rounded"></div>
+                  <div class="bg-muted h-3 w-5/6 rounded"></div>
+                </div>
+              </div>
+            </div>
+            <p v-else class="text-muted-foreground py-8 text-center">
+              No posts available
+            </p>
+          </div>
+        </ClientOnly>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
