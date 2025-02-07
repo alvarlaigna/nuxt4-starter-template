@@ -76,8 +76,8 @@ export default defineNuxtConfig({
             ],
             "style-src": ["'self'", "'unsafe-inline'", "https:"],
             "connect-src": ["'self'", "https:", "wss:", "data:", "*"],
-            "default-src": ["'self'", "https:", "data:", "blob:"],
-            "worker-src": ["'self'", "blob:"],
+            "default-src": ["'self'", "https:", "data:", "blob:", "wss:"],
+            "worker-src": ["'self'", "blob:", "https:"],
             "manifest-src": ["'self'"],
           },
           referrerPolicy: "no-referrer-when-downgrade",
@@ -324,6 +324,13 @@ export default defineNuxtConfig({
         cache: {
           maxAge: 3600,
           staleMaxAge: 60,
+        },
+      },
+      // Service Worker
+      "/serviceWorker.js": {
+        headers: {
+          "Cache-Control": "no-cache",
+          "Service-Worker-Allowed": "/",
         },
       },
       // Static assets
